@@ -1,4 +1,4 @@
-# GroceryStore
+# SimpleAPI
 
 To use this project you need to have the database created by executing CreateEmployeeDb. Make sure the connection string for EmployeeConnection in appsettings.json inside the SimpleAPI project matches the database that was just created locally. 
 
