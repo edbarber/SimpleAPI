@@ -1,0 +1,80 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Employees";
+}
+
+@Html.AntiForgeryToken()
+
+<h2>Employees</h2>
+<partial name="_StatusMessage" model="Model.StatusMessage" />
+<a asp-page="/AddEmployee" class="btn btn-default pull-right">Add Employee</a>
+@if (Model.Employees != null)
+{
+    if (Model.Employees.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Employees)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>
+                            <div class="dropdown pull-right">
+                                <a href="#" data-toggle="dropdown">
+                                    <i class="glyphicon glyphicon-option-vertical"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right">
+                                    <li><a asp-page="/EditEmployee" asp-route-id="@item.Id">Edit</a></li>
+                                    <li><a href="#" class="deleteEmployee" id="delete_@item.Id">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>There are no employees to show.</p>
+    }
+}
+else
+{
+    <p class="text-danger">An error occured getting the employees to show.</p>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.deleteEmployee').click(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: '@Url.Page("Index", "DeleteEmployee")',
+                    type: 'POST',
+                    data: {
+                        id: e.currentTarget.id.split('_')[1]
+                    },
+                    headers: {
+                        RequestVerificationToken:
+                            $('input:hidden[name="__RequestVerificationToken"]').val()
+                    }
+                }).done(function () {
+                    window.location.replace('@Url.Page("Index")');
+                });
+            });
+        });
+    </script>
+}

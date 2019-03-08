@@ -1,0 +1,8 @@
+﻿@page
+@model StatusCodeErrorModel
+@{
+    ViewData["Title"] = $"Error {Model.StatusCode}";
+}
+
+<h2 class="text-danger">Error @Model.StatusCode</h2>
+<p>@Model.Description</p>
